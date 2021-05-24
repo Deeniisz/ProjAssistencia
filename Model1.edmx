@@ -1,0 +1,218 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="AssistenciaDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="TB_CLIENTE">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nome" Type="varchar" MaxLength="50" />
+          <Property Name="telefone" Type="int" />
+          <Property Name="email" Type="varchar" MaxLength="50" />
+          <Property Name="endereco" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="TB_SERVICO">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="descricao" Type="varchar" MaxLength="50" />
+          <Property Name="cliente" Type="int" />
+          <Property Name="tecnico" Type="int" />
+        </EntityType>
+        <EntityType Name="TB_TECNICO">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nome" Type="varchar" MaxLength="50" />
+          <Property Name="telefone" Type="int" />
+          <Property Name="email" Type="varchar" MaxLength="50" />
+          <Property Name="endereco" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <Association Name="FK_TBSERVICO_CLIENTE">
+          <End Role="TB_CLIENTE" Type="Self.TB_CLIENTE" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="TB_SERVICO" Type="Self.TB_SERVICO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_CLIENTE">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="TB_SERVICO">
+              <PropertyRef Name="cliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TBSERVICO_SERVICO">
+          <End Role="TB_TECNICO" Type="Self.TB_TECNICO" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="TB_SERVICO" Type="Self.TB_SERVICO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_TECNICO">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="TB_SERVICO">
+              <PropertyRef Name="tecnico" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="AssistenciaDBModelStoreContainer">
+          <EntitySet Name="TB_CLIENTE" EntityType="Self.TB_CLIENTE" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TB_SERVICO" EntityType="Self.TB_SERVICO" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TB_TECNICO" EntityType="Self.TB_TECNICO" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_TBSERVICO_CLIENTE" Association="Self.FK_TBSERVICO_CLIENTE">
+            <End Role="TB_CLIENTE" EntitySet="TB_CLIENTE" />
+            <End Role="TB_SERVICO" EntitySet="TB_SERVICO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TBSERVICO_SERVICO" Association="Self.FK_TBSERVICO_SERVICO">
+            <End Role="TB_TECNICO" EntitySet="TB_TECNICO" />
+            <End Role="TB_SERVICO" EntitySet="TB_SERVICO" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="AssistenciaDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="TB_CLIENTE">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nome" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="telefone" Type="Int32" />
+          <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="endereco" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="TB_SERVICO" Relationship="Self.FK_TBSERVICO_CLIENTE" FromRole="TB_CLIENTE" ToRole="TB_SERVICO" />
+        </EntityType>
+        <EntityType Name="TB_SERVICO">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="descricao" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="cliente" Type="Int32" />
+          <Property Name="tecnico" Type="Int32" />
+          <NavigationProperty Name="TB_CLIENTE" Relationship="Self.FK_TBSERVICO_CLIENTE" FromRole="TB_SERVICO" ToRole="TB_CLIENTE" />
+          <NavigationProperty Name="TB_TECNICO" Relationship="Self.FK_TBSERVICO_SERVICO" FromRole="TB_SERVICO" ToRole="TB_TECNICO" />
+        </EntityType>
+        <EntityType Name="TB_TECNICO">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nome" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="telefone" Type="Int32" />
+          <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="endereco" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="TB_SERVICO" Relationship="Self.FK_TBSERVICO_SERVICO" FromRole="TB_TECNICO" ToRole="TB_SERVICO" />
+        </EntityType>
+        <Association Name="FK_TBSERVICO_CLIENTE">
+          <End Role="TB_CLIENTE" Type="Self.TB_CLIENTE" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="TB_SERVICO" Type="Self.TB_SERVICO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_CLIENTE">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="TB_SERVICO">
+              <PropertyRef Name="cliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TBSERVICO_SERVICO">
+          <End Role="TB_TECNICO" Type="Self.TB_TECNICO" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="TB_SERVICO" Type="Self.TB_SERVICO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_TECNICO">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="TB_SERVICO">
+              <PropertyRef Name="tecnico" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="AssistenciaDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="TB_CLIENTE" EntityType="Self.TB_CLIENTE" />
+          <EntitySet Name="TB_SERVICO" EntityType="Self.TB_SERVICO" />
+          <EntitySet Name="TB_TECNICO" EntityType="Self.TB_TECNICO" />
+          <AssociationSet Name="FK_TBSERVICO_CLIENTE" Association="Self.FK_TBSERVICO_CLIENTE">
+            <End Role="TB_CLIENTE" EntitySet="TB_CLIENTE" />
+            <End Role="TB_SERVICO" EntitySet="TB_SERVICO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TBSERVICO_SERVICO" Association="Self.FK_TBSERVICO_SERVICO">
+            <End Role="TB_TECNICO" EntitySet="TB_TECNICO" />
+            <End Role="TB_SERVICO" EntitySet="TB_SERVICO" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="AssistenciaDBModelStoreContainer" CdmEntityContainer="AssistenciaDBEntities">
+          <EntitySetMapping Name="TB_CLIENTE">
+            <EntityTypeMapping TypeName="AssistenciaDBModel.TB_CLIENTE">
+              <MappingFragment StoreEntitySet="TB_CLIENTE">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="nome" ColumnName="nome" />
+                <ScalarProperty Name="telefone" ColumnName="telefone" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="endereco" ColumnName="endereco" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TB_SERVICO">
+            <EntityTypeMapping TypeName="AssistenciaDBModel.TB_SERVICO">
+              <MappingFragment StoreEntitySet="TB_SERVICO">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="descricao" ColumnName="descricao" />
+                <ScalarProperty Name="cliente" ColumnName="cliente" />
+                <ScalarProperty Name="tecnico" ColumnName="tecnico" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TB_TECNICO">
+            <EntityTypeMapping TypeName="AssistenciaDBModel.TB_TECNICO">
+              <MappingFragment StoreEntitySet="TB_TECNICO">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="nome" ColumnName="nome" />
+                <ScalarProperty Name="telefone" ColumnName="telefone" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="endereco" ColumnName="endereco" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
